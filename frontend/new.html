@@ -1,0 +1,40 @@
+<html>
+<body>
+    <button href="/home.html">Home</button>
+    <div><button href="#" id="newsubprompt" onclick="addFields()">New sub-prompt</button></div>
+    <form id="container"><label for="name">Video name:</label><input type="text" id="name" name="name"><br><input type="submit" value="Send"></form>
+</body>
+<footer>
+    <script type='text/javascript'>
+        var form = document.getElementById('container');
+        form.onsubmit = function(event) {
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData(form);
+            xhr.open('POST','http://localhost:8000/generate/')
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(Object.fromEntries(formData)));
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    form.reset();
+                }
+            }
+            return false; 
+        }
+        let count = 0;
+
+        function addFields() {
+            var container = document.getElementById("container");
+            container.appendChild(document.createTextNode("Prompt " + (count + 1)));
+            var input = document.createElement("textarea");
+            input.type = "text";
+            input.name = "prompt" + (count + 1);
+            input.rows = 5;
+            input.cols = 90;
+            container.appendChild(input); 
+            container.appendChild(document.createElement("br"));
+            count += 1;
+        }
+    </script>
+</footer>
+</html>
